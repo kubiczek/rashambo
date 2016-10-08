@@ -12,7 +12,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -64,7 +63,6 @@ public class Application {
 
             summary.forEach((player, count) -> log.info("{}: {} time(s) winner", player.getName(), count));
             log.info("The game is tied {} time(s)", tie);
-
         };
     }
 }
