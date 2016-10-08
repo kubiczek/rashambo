@@ -7,11 +7,10 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static com.kubiczek.rashambo.game.TwoPlayersRashambo.BattleResult.PLAYER_1;
-import static com.kubiczek.rashambo.game.TwoPlayersRashambo.BattleResult.PLAYER_2;
-import static com.kubiczek.rashambo.game.TwoPlayersRashambo.BattleResult.TIE;
-import static org.mockito.Mockito.*;
-import static org.assertj.core.api.Assertions.*;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by mkubiczek on 10/8/2016.
@@ -34,11 +33,11 @@ public class TwoPlayersRashamboTest {
         when(player1.play()).thenReturn(Handsing.ROCK);
         when(player2.play()).thenReturn(Handsing.SCISSORS);
         // When
-        TwoPlayersRashambo.BattleResult result = game.battle();
-        TwoPlayersRashambo.BattleResult resultReverse = reverseGame.battle();
+        Optional<Player> result = game.battle();
+        Optional<Player> resultReverse = reverseGame.battle();
         // Then
-        assertThat(result).isEqualTo(PLAYER_1);
-        assertThat(resultReverse).isEqualTo(PLAYER_2);
+        assertThat(result.get()).isEqualTo(player1);
+        assertThat(resultReverse.get()).isEqualTo(player1);
     }
 
     @Test
@@ -47,11 +46,11 @@ public class TwoPlayersRashamboTest {
         when(player1.play()).thenReturn(Handsing.PAPER);
         when(player2.play()).thenReturn(Handsing.ROCK);
         // When
-        TwoPlayersRashambo.BattleResult result = game.battle();
-        TwoPlayersRashambo.BattleResult resultReverse = reverseGame.battle();
+        Optional<Player> result = game.battle();
+        Optional<Player> resultReverse = reverseGame.battle();
         // Then
-        assertThat(result).isEqualTo(PLAYER_1);
-        assertThat(resultReverse).isEqualTo(PLAYER_2);
+        assertThat(result.get()).isEqualTo(player1);
+        assertThat(resultReverse.get()).isEqualTo(player1);
     }
 
     @Test
@@ -60,11 +59,11 @@ public class TwoPlayersRashamboTest {
         when(player1.play()).thenReturn(Handsing.SCISSORS);
         when(player2.play()).thenReturn(Handsing.PAPER);
         // When
-        TwoPlayersRashambo.BattleResult result = game.battle();
-        TwoPlayersRashambo.BattleResult resultReverse = reverseGame.battle();
+        Optional<Player> result = game.battle();
+        Optional<Player> resultReverse = reverseGame.battle();
         // Then
-        assertThat(result).isEqualTo(PLAYER_1);
-        assertThat(resultReverse).isEqualTo(PLAYER_2);
+        assertThat(result.get()).isEqualTo(player1);
+        assertThat(resultReverse.get()).isEqualTo(player1);
     }
 
     @Test
@@ -74,9 +73,9 @@ public class TwoPlayersRashamboTest {
             when(player1.play()).thenReturn(handsing);
             when(player2.play()).thenReturn(handsing);
             // When
-            TwoPlayersRashambo.BattleResult result = game.battle();
+            Optional<Player> result = game.battle();
             // Then
-            assertThat(result).isEqualTo(TIE);
+            assertThat(result.isPresent()).isFalse();
         }
     }
 }

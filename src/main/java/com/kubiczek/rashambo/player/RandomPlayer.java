@@ -6,7 +6,7 @@ import java.util.Random;
  * Created by mkubiczek on 10/8/2016.
  */
 public class RandomPlayer extends AbstractPlayer {
-    private static Random random = new Random();
+    private static final Random random = new Random();
 
     public RandomPlayer(String name) {
         super(name);

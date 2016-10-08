@@ -10,9 +10,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.validation.annotation.Validated;
+
+import java.lang.reflect.Array;
+import java.util.*;
 
 /**
  * Created by mkubiczek on 10/8/2016.
@@ -31,21 +32,39 @@ public class Application {
     private int numberOfRounds;
 
     @Bean
+    List<Player> players() {
+        return Arrays.asList(
+                new RockPlayer("Rock Player"),
+                new RandomPlayer("Random Player")
+        );
+    }
+
+    @Bean
     public TwoPlayersRashambo game() {
-        Player rockPlayer = new RockPlayer("Rock Player");
-        Player randomPlayer = new RandomPlayer("Random Player");
-        return new TwoPlayersRashambo(rockPlayer, randomPlayer);
+        log.info("Setting up the game for {} players", numberOfPlayers);
+        List<Player> players = players();
+        return new TwoPlayersRashambo(players.get(0), players.get(1));
     }
 
     @Bean
     public CommandLineRunner commandLineRunner() {
-        return strings -> {
+        return args -> {
             log.info("Let's the game begin! {} players, {} round(s)", numberOfPlayers, numberOfRounds);
-
+            Map<Player, Integer> summary = new HashMap<>();
+            int tie = 0;
             for (int i = 0; i < numberOfRounds; i++) {
-                TwoPlayersRashambo.BattleResult result = game().battle();
-                log.info("Battle result: {}", result);
+                Optional<Player> winner = game().battle();
+                if (winner.isPresent()) {
+                    summary.put(winner.get(), summary.getOrDefault(winner.get(), 0) + 1);
+                } else {
+                    tie++;
+                }
+                log.trace("Battle winner: {}", winner.isPresent() ? winner.get().getName() : "Tie");
             }
+
+            summary.forEach((player, count) -> log.info("{}: {} time(s) winner", player.getName(), count));
+            log.info("The game is tied {} time(s)", tie);
+
         };
     }
 }
