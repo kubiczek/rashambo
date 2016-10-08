@@ -8,7 +8,7 @@ import java.util.Random;
 public class RandomPlayer extends AbstractPlayer {
     private static Random random = new Random();
 
-    protected RandomPlayer(String name) {
+    public RandomPlayer(String name) {
         super(name);
     }
 
