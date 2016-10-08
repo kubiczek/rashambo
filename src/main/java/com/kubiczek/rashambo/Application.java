@@ -1,6 +1,6 @@
 package com.kubiczek.rashambo;
 
-import com.kubiczek.rashambo.game.TwoPlayersRashambo;
+import com.kubiczek.rashambo.game.RashamboGame;
 import com.kubiczek.rashambo.player.Player;
 import com.kubiczek.rashambo.player.RandomPlayer;
 import com.kubiczek.rashambo.player.RockPlayer;
@@ -32,17 +32,18 @@ public class Application {
 
     @Bean
     List<Player> players() {
-        return Arrays.asList(
-                new RockPlayer("Rock Player"),
-                new RandomPlayer("Random Player")
-        );
+        List<Player> players = new ArrayList<>(numberOfPlayers);
+        players.add(new RockPlayer("Rock Player"));
+        for (int i = 1; i < numberOfPlayers; i++) {
+            players.add(new RandomPlayer("Random Player " + i));
+        }
+        return players;
     }
 
     @Bean
-    public TwoPlayersRashambo game() {
+    public RashamboGame game() {
         log.info("Setting up the game for {} players", numberOfPlayers);
-        List<Player> players = players();
-        return new TwoPlayersRashambo(players.get(0), players.get(1));
+        return new RashamboGame(players());
     }
 
     @Bean
